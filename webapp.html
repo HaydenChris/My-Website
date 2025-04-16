@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic Tac Toe vs Computer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #f4f7fc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .top-link {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .top-link a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #ecf0f1;
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: 1px solid #bdc3c7;
+      transition: background-color 0.3s ease;
+    }
+
+    .top-link a:hover {
+      background-color: #d0d7de;
+    }
+
+    .game-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 350px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    #status {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #27ae60;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border: 2px solid #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .cell.taken {
+      cursor: not-allowed;
+      color: #7f8c8d;
+    }
+
+    #reset {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #reset:hover {
+      background-color: #2980b9;
+    }
+
+    .history {
+      margin-top: 20px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .history h3 {
+      margin-bottom: 10px;
+      font-size: 1em;
+      color: #2c3e50;
+    }
+
+    .history ul {
+      list-style: none;
+      padding-left: 0;
+      font-size: 0.95em;
+      color: #7f8c8d;
+    }
+
+    .history li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-link">
+    <a href="scratch.html">Scratch Page</a>
+  </div>
+
+  <div class="game-container">
+    <h1>Tic Tac Toe</h1>
+    <div id="status">Your turn (X)</div>
+    <div id="board"></div>
+    <button id="reset">Restart Game</button>
+
+    <div class="history">
+      <h3>Move History</h3>
+      <ul id="moveList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const boardElement = document.getElementById("board");
+    const statusElement = document.getElementById("status");
+    const resetButton = document.getElementById("reset");
+    const moveList = document.getElementById("moveList");
+
+    let board = Array(9).fill(null);
+    let gameActive = true;
+
+    const winningCombinations = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    const renderBoard = () => {
+      boardElement.innerHTML = "";
+      board.forEach((cell, index) => {
+        const cellDiv = document.createElement("div");
+        cellDiv.classList.add("cell");
+        if (cell) {
+          cellDiv.classList.add("taken");
+          cellDiv.textContent = cell;
+        }
+        cellDiv.addEventListener("click", () => handlePlayerMove(index));
+        boardElement.appendChild(cellDiv);
+      });
+    };
+
+    const handlePlayerMove = (index) => {
+      if (!gameActive || board[index]) return;
+      board[index] = 'X';
+      logMove('Player (X)', index);
+      renderBoard();
+
+      if (checkWin('X')) {
+        endGame("You win!");
+        return;
+      } else if (isDraw()) {
+        endGame("It's a draw!");
+        return;
+      }
+
+      statusElement.textContent = "Computer's turn...";
+      setTimeout(() => {
+        computerMove();
+      }, 500);
+    };
+
+    const computerMove = () => {
+      if (!gameActive) return;
+      const available = board.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
+      const move = available[Math.floor(Math.random() * available.length)];
+      if (move !== undefined) {
+        board[move] = 'O';
+        logMove('Computer (O)', move);
+        renderBoard();
+
+        if (checkWin('O')) {
+          endGame("Computer wins!");
+        } else if (isDraw()) {
+          endGame("It's a draw!");
+        } else {
+          statusElement.textContent = "Your turn (X)";
+        }
+      }
+    };
+
+    const checkWin = (player) => {
+      return winningCombinations.some(combination =>
+        combination.every(index => board[index] === player)
+      );
+    };
+
+    const isDraw = () => board.every(cell => cell !== null);
+
+    const endGame = (message) => {
+      gameActive = false;
+      statusElement.textContent = message;
+    };
+
+    const logMove = (player, index) => {
+      const li = document.createElement("li");
+      li.textContent = `${player} picked cell ${index + 1}`;
+      moveList.appendChild(li);
+    };
+
+    const resetGame = () => {
+      board = Array(9).fill(null);
+      gameActive = true;
+      moveList.innerHTML = "";
+      statusElement.textContent = "Your turn (X)";
+      renderBoard();
+    };
+
+    resetButton.addEventListener("click", resetGame);
+    renderBoard();
+  </script>
+</body>
+</html>
