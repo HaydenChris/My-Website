@@ -1,0 +1,139 @@
+/* Apply overall page styles */
+body {
+    background-color: whitesmoke;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Styling for the main content container */
+div#content {
+    display: inline-block;
+    padding: 20px;
+    border: 2px solid #ddd; /* Thin border */
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Styling for anchor links in the navigation */
+a {
+    display: inline-block;
+    margin: 10px;
+    text-decoration: none;
+    color: #5a2d81;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Styling for header */
+h1, h2 {
+    color: #3b0a57;
+}
+
+/* Styling for ordered list */
+ol {
+    display: inline-block;
+    text-align: left;
+    margin-top: 20px;
+    padding: 0;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Centering the "Starting Lineup," "Bench Players," and "Coaching Staff" sections */
+li {
+    list-style-type: none; /* Remove default list bullets for individual sections */
+    text-align: center;
+}
+
+/* Bold the section headers ("Starting Lineup," "Bench Players," and "Coaching Staff") */
+ol > li {
+    font-weight: bold;
+    font-size: 22px;  /* Increased font size */
+    text-align: center;
+}
+
+/* Styling for unordered lists within the list items */
+ul {
+    margin-bottom: 20px;
+    list-style-type: none; /* Remove default bullets for names */
+    margin-left: 0;
+    padding: 0;
+    text-align: center; /* Center the unordered list */
+}
+
+/* Style the names with numbers */
+ul li {
+    text-align: center; /* Center the list items */
+    padding-left: 0;
+    font-weight: normal; /* Make sure names are not bold */
+}
+
+/* Add numbers to the list of people */
+ul li::before {
+    content: counter(item) ". "; /* Add numbers before the list items */
+    counter-increment: item; /* Increment the number for each item */
+}
+
+/* Reset the counter for the list */
+ul {
+    counter-reset: item; /* Start numbering from 1 */
+}
+
+/* Styling for iframe (YouTube video) */
+iframe {
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer with Back to Top button */
+footer {
+    margin-top: 40px;
+}
+
+/* Back to top link styling */
+footer a {
+    text-decoration: none;
+    color: #3b0a57;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 15px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+footer a:hover {
+    background-color: #ddd;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    /* Adjust text size and layout for smaller screens */
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    footer a {
+        font-size: 14px;
+    }
+}
+.center-logo {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: auto;
+}
